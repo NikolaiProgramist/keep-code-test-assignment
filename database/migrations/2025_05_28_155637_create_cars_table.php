@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
+            $table->decimal('full_price', 8, 4);
+            $table->decimal('rental_price', 8, 4);
             $table->string('name', 255);
             $table->string('brand', 255);
             $table->string('color', 50);
