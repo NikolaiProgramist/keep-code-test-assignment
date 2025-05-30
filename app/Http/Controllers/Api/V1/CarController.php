@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
+use App\Http\Resources\Api\V1\CarResource;
 use App\Models\Car;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class CarController extends Controller
@@ -14,34 +15,34 @@ class CarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Collection
+    public function index(): AnonymousResourceCollection
     {
-        return Car::all();
+        return CarResource::collection(Car::paginate(10));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCarRequest $request): Car
+    public function store(StoreCarRequest $request): CarResource
     {
-        return Car::create($request->all());
+        return new CarResource(Car::create($request->all()));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Car $car): Car
+    public function show(Car $car): CarResource
     {
-        return $car;
+        return new CarResource($car);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCarRequest $request, Car $car): Car
+    public function update(UpdateCarRequest $request, Car $car): CarResource
     {
         $car->update($request->all());
-        return $car;
+        return new CarResource($car);
     }
 
     /**
