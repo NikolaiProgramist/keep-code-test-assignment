@@ -23,6 +23,8 @@ class UpdateCarRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'full_price' => 'required|numeric|between:100000,9999999',
+            'rental_price' => 'required|numeric|between:100,20000',
             'name' => 'min:2|max:255',
             'brand' => 'min:2|max:255',
             'color' => [
