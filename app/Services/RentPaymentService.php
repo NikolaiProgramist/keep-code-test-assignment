@@ -14,7 +14,7 @@ class RentPaymentService
 {
     public function rent(Authenticatable $user, Car $car): JsonResponse
     {
-        $hours = request()->get('hours');
+        $hours = (int) request()->get('hours');
         $expiresAt = now()->addHours($hours);
 
         Gate::authorize('car-not-purchased', $car);
@@ -41,7 +41,7 @@ class RentPaymentService
     public function extendRent(Authenticatable $user, Purchase $purchase): JsonResponse
     {
         $car = $purchase->car;
-        $hours = request()->get('hours');
+        $hours = (int) request()->get('hours');
         $newExpiresAt = Carbon::createFromDate($purchase->expires_at)->addHours($hours);
 
         Gate::authorize('purchase-owner', $purchase);
