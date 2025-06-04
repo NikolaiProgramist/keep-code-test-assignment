@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api\V1;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class CarResource extends JsonResource
 {
@@ -23,7 +24,8 @@ class CarResource extends JsonResource
             'color' => $this->color,
             'transmission' => $this->transmission,
             'fuel' => $this->fuel,
-            'power' => $this->power
+            'power' => $this->power,
+            'PIN' => $this->when(Auth::user()->id === optional($this->purchase)->user_id, $this->PIN)
         ];
     }
 }

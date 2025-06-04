@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Car extends Model
 {
@@ -14,6 +15,12 @@ class Car extends Model
         'color',
         'transmission',
         'fuel',
-        'power'
+        'power',
+        'PIN'
     ];
+
+    public function purchase(): HasOne
+    {
+        return $this->hasOne(Purchase::class);
+    }
 }

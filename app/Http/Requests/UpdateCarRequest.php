@@ -36,7 +36,8 @@ class UpdateCarRequest extends FormRequest
             'fuel' => [
                 Rule::in(['petrol', 'diesel', 'electrical'])
             ],
-            'power' => 'integer|between:25,296'
+            'power' => 'integer|between:25,296',
+            'PIN' => 'integer|min_digits:12|max_digits:12'
         ];
     }
 }

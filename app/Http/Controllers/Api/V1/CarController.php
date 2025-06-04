@@ -9,6 +9,7 @@ use App\Http\Resources\Api\V1\CarResource;
 use App\Models\Car;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class CarController extends Controller
 {
@@ -17,7 +18,7 @@ class CarController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        return CarResource::collection(Car::paginate(10));
+        return CarResource::collection(Car::query()->where('purchased', 0)->paginate(10));
     }
 
     /**
@@ -33,6 +34,11 @@ class CarController extends Controller
      */
     public function show(Car $car): CarResource
     {
+        if (Gate::allows('car-owner', $car)) {
+            return new CarResource($car);
+        }
+
+        Gate::authorize('car-not-purchased', $car);
         return new CarResource($car);
     }
 

@@ -39,7 +39,8 @@ class StoreCarRequest extends FormRequest
                 'required',
                 Rule::in(['petrol', 'diesel', 'electrical'])
             ],
-            'power' => 'required|integer|between:25,296'
+            'power' => 'required|integer|between:25,296',
+            'PIN' => 'required|integer|min_digits:12|max_digits:12'
         ];
     }
 }
