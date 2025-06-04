@@ -80,6 +80,12 @@ class AppServiceProvider extends ServiceProvider
                 : Response::denyAsNotFound('You are not the owner of this purchase.');
         });
 
+        Gate::define('is-admin', function (User $user) {
+            return $user->role === 'admin'
+                ? Response::allow()
+                : Response::deny('You are not an administrator.')->withStatus(401);
+        });
+
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(40)->by($request->user()?->id ?: $request->ip())->response(
                 function (Request $request, array $headers) {
