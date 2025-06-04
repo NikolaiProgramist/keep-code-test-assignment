@@ -33,57 +33,57 @@ class AppServiceProvider extends ServiceProvider
                 ? Response::allow()
                 : Response::deny(
                     'The rent extension time in total with the current rent time cannot exceed 24 hours.'
-                );
+                )->withStatus(403);
         });
 
         Gate::define('rent-price-cash-enough', function (User $user, Car $car, int $hours) {
             return $user->cash >= $hours * $car->rental_price
                 ? Response::allow()
-                : Response::deny(
-                    'Not enough funds in the account to rent.',
-                    403
-                );
+                : Response::deny('Not enough funds in the account to rent.')
+                    ->withStatus(403);
         });
 
         Gate::define('full-price-cash-enough', function (User $user, Car $car) {
             return $user->cash >= $car->full_price
                 ? Response::allow()
-                : Response::deny(
-                    'There are not enough funds in your account to make a purchase.',
-                    403
-                );
+                : Response::deny('There are not enough funds in your account to make a purchase.')
+                    ->withStatus(403);
         });
 
         Gate::define('car-not-purchased', function (User $user, Car $car) {
             return $car->purchased === 0
                 ? Response::allow()
-                : Response::denyAsNotFound('This car has already been purchased.');
+                : Response::deny('This car has already been purchased.')
+                    ->withStatus(403);
         });
 
         Gate::define('car-owner', function (User $user, Car $car) {
             return $user->id === optional($car->purchase)->user_id
                 ? Response::allow()
-                : Response::denyAsNotFound('You are not the owner of this car.');
+                : Response::deny('You are not the owner of this car.')
+                    ->withStatus(403);
         });
 
         Gate::define('purchase-rented', function (User $user, Purchase $purchase) {
             return $purchase->expires_at !== null
                 ? Response::allow()
-                : Response::denyAsNotFound(
+                : Response::deny(
                     'It is not possible to extend the rent for a purchase that has already been fully purchased.'
-                );
+                )->withStatus(403);
         });
 
         Gate::define('purchase-owner', function (User $user, Purchase $purchase) {
             return $user->id === $purchase->user_id
                 ? Response::allow()
-                : Response::denyAsNotFound('You are not the owner of this purchase.');
+                : Response::deny('You are not the owner of this purchase.')
+                    ->withStatus(403);
         });
 
         Gate::define('is-admin', function (User $user) {
             return $user->role === 'admin'
                 ? Response::allow()
-                : Response::deny('You are not an administrator.')->withStatus(401);
+                : Response::deny('You are not an administrator.')
+                    ->withStatus(403);
         });
 
         RateLimiter::for('api', function (Request $request) {
