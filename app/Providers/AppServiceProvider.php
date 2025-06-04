@@ -29,7 +29,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('rent-hours-limit', function (User $user, Purchase $purchase, int $hours) {
-            return (Carbon::createFromDate($purchase->expires_at)->timestamp - now()->timestamp) + Carbon::createFromTimestamp(0)->addHours($hours)->timestamp <= Carbon::createFromTimestamp(0)->addHours(24)->timestamp
+            $leftHours = Carbon::createFromDate($purchase->expires_at)->timestamp - now()->timestamp;
+            $newHours = Carbon::createFromTimestamp(0)->addHours($hours)->timestamp;
+            $maxHours = Carbon::createFromTimestamp(0)->addHours(24)->timestamp;
+
+            return $leftHours + $newHours <= $maxHours
                 ? Response::allow()
                 : Response::deny(
                     'The rent extension time in total with the current rent time cannot exceed 24 hours.'
