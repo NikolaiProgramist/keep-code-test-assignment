@@ -26,6 +26,7 @@ class CarController extends Controller
      */
     public function store(StoreCarRequest $request): CarResource
     {
+        Gate::authorize('is-admin');
         return new CarResource(Car::create($request->all()));
     }
 
@@ -47,7 +48,9 @@ class CarController extends Controller
      */
     public function update(UpdateCarRequest $request, Car $car): CarResource
     {
+        Gate::authorize('is-admin');
         $car->update($request->all());
+
         return new CarResource($car);
     }
 
@@ -56,7 +59,9 @@ class CarController extends Controller
      */
     public function destroy(Car $car): Response
     {
+        Gate::authorize('is-admin');
         $car->delete();
+
         return response(null, 204);
     }
 }
