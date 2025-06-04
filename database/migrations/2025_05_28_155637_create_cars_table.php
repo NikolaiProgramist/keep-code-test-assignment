@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('transmission', 9);
             $table->string('fuel', 50);
             $table->integer('power');
+            $table->bigInteger('PIN');
             $table->boolean('purchased')->default(false);
             $table->timestamps();
         });
