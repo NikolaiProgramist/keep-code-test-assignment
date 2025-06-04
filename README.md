@@ -29,6 +29,13 @@ composer install
 php artisan migrate
 ```
 
+Заполните таблицы тестовыми данными:
+
+```bash
+php artisan db:seed --class=UserSeeder
+php artisan db:seed --class=CarSeeder
+```
+
 Запустите сервер:
 
 ```bash
