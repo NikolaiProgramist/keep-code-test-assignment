@@ -9,6 +9,7 @@ use App\Http\Resources\Api\V1\PurchaseResource;
 use App\Http\Resources\Api\V1\StatusPurchaseResource;
 use App\Models\Purchase;
 use App\Services\CodeService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
@@ -41,9 +42,9 @@ class PurchaseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePurchaseRequest $request)
+    public function store(StorePurchaseRequest $request): JsonResponse
     {
-        // Здесь должна быть работа непосредственно с купленными товарами
+        return response()->json('This action is missing.', 403);
     }
 
     /**
@@ -58,16 +59,16 @@ class PurchaseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePurchaseRequest $request, Purchase $purchase)
+    public function update(UpdatePurchaseRequest $request, Purchase $purchase): JsonResponse
     {
-        //
+        return response()->json('This action is missing.', 403);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Purchase $purchase)
+    public function destroy(Purchase $purchase): JsonResponse
     {
-        Gate::authorize('purchase-owner', $purchase);
+        return response()->json('This action is missing.', 403);
     }
 }

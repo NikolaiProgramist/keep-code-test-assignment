@@ -7,6 +7,7 @@ use App\Http\Requests\RentPurchaseRequest;
 use App\Models\Car;
 use App\Models\Purchase;
 use App\Services\RentPaymentService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class RentPurchaseController extends Controller
@@ -14,7 +15,7 @@ class RentPurchaseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RentPurchaseRequest $request, string $id, RentPaymentService $service)
+    public function store(RentPurchaseRequest $request, string $id, RentPaymentService $service): JsonResponse
     {
         return $service->rent(Auth::user(), Car::findOrFail($id));
     }
@@ -22,7 +23,7 @@ class RentPurchaseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RentPurchaseRequest $request, string $id, RentPaymentService $service)
+    public function update(RentPurchaseRequest $request, string $id, RentPaymentService $service): JsonResponse
     {
         return $service->extendRent(Auth::user(), Purchase::findOrFail($id));
     }
