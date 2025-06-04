@@ -17,6 +17,12 @@ DB_USERNAME=username
 DB_PASSWORD=password
 ```
 
+Далее переименуйте файл `.env.example` в `.env`:
+
+```bash
+mv .env.example .env
+```
+
 Установите зависимости:
 
 ```bash
