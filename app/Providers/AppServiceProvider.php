@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Car;
+use App\Models\Purchase;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +28,58 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::define('rent-hours-limit', function (User $user, Purchase $purchase, int $hours) {
+            return (Carbon::createFromDate($purchase->expires_at)->timestamp - now()->timestamp) + Carbon::createFromTimestamp(0)->addHours($hours)->timestamp <= Carbon::createFromTimestamp(0)->addHours(24)->timestamp
+                ? Response::allow()
+                : Response::deny(
+                    'The rent extension time in total with the current rent time cannot exceed 24 hours.'
+                );
+        });
+
+        Gate::define('rent-price-cash-enough', function (User $user, Car $car, int $hours) {
+            return $user->cash >= $hours * $car->rental_price
+                ? Response::allow()
+                : Response::deny(
+                    'Not enough funds in the account to rent.',
+                    403
+                );
+        });
+
+        Gate::define('full-price-cash-enough', function (User $user, Car $car) {
+            return $user->cash >= $car->full_price
+                ? Response::allow()
+                : Response::deny(
+                    'There are not enough funds in your account to make a purchase.',
+                    403
+                );
+        });
+
+        Gate::define('car-not-purchased', function (User $user, Car $car) {
+            return $car->purchased === 0
+                ? Response::allow()
+                : Response::denyAsNotFound('This car has already been purchased.');
+        });
+
+        Gate::define('car-owner', function (User $user, Car $car) {
+            return $user->id === optional($car->purchase)->user_id
+                ? Response::allow()
+                : Response::denyAsNotFound('You are not the owner of this car.');
+        });
+
+        Gate::define('purchase-rented', function (User $user, Purchase $purchase) {
+            return $purchase->expires_at !== null
+                ? Response::allow()
+                : Response::denyAsNotFound(
+                    'It is not possible to extend the rent for a purchase that has already been fully purchased.'
+                );
+        });
+
+        Gate::define('purchase-owner', function (User $user, Purchase $purchase) {
+            return $user->id === $purchase->user_id
+                ? Response::allow()
+                : Response::denyAsNotFound('You are not the owner of this purchase.');
+        });
+
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(40)->by($request->user()?->id ?: $request->ip())->response(
                 function (Request $request, array $headers) {
