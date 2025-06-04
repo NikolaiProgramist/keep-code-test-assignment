@@ -64,7 +64,5 @@ php artisan schedule:work
 email: admin@mail.ru
 password: test1234
 
----
-
 Вы также можете использовать коллекцию `postman` для тестирования.
 Она располагается в директории `files/`.
