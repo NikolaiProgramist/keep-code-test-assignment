@@ -15,16 +15,16 @@ class RentPurchaseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RentPurchaseRequest $request, string $id, RentPaymentService $service): JsonResponse
+    public function store(RentPurchaseRequest $request, Car $car, RentPaymentService $service): JsonResponse
     {
-        return $service->rent(Auth::user(), Car::findOrFail($id));
+        return $service->rent(Auth::user(), $car);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(RentPurchaseRequest $request, string $id, RentPaymentService $service): JsonResponse
+    public function update(RentPurchaseRequest $request, Purchase $purchase, RentPaymentService $service): JsonResponse
     {
-        return $service->extendRent(Auth::user(), Purchase::findOrFail($id));
+        return $service->extendRent(Auth::user(), $purchase);
     }
 }

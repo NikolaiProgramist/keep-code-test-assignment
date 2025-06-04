@@ -12,7 +12,7 @@ Route::prefix('v1')->middleware(['throttle:api'])->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 });
 
-Route::prefix('v1/cars/{id}')->middleware(['throttle:api', 'auth:sanctum'])->group(function () {
+Route::prefix('v1/cars/{car}')->middleware(['throttle:api', 'auth:sanctum'])->group(function () {
     Route::post('full-purchase', [FullPurchaseController::class, 'store']);
     Route::post('rent-purchase', [RentPurchaseController::class, 'store']);
 });
@@ -24,6 +24,6 @@ Route::prefix('v1')->middleware(['throttle:api', 'auth:sanctum'])->group(functio
 
 Route::prefix('v1')->middleware(['throttle:api', 'auth:sanctum'])->group(function () {
     Route::apiResource('purchases', PurchaseController::class);
-    Route::patch('purchases/{id}/rent-purchase', [RentPurchaseController::class, 'update']);
+    Route::patch('purchases/{purchase}/rent-purchase', [RentPurchaseController::class, 'update']);
     Route::get('purchases/{purchase}/status', [PurchaseController::class, 'status']);
 });

@@ -14,8 +14,8 @@ class FullPurchaseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $id, FullPaymentService $service): JsonResponse
+    public function store(Request $request, Car $car, FullPaymentService $service): JsonResponse
     {
-        return $service->full(Auth::user(), Car::findOrFail($id));
+        return $service->full(Auth::user(), $car);
     }
 }
