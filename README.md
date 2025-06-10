@@ -1,4 +1,4 @@
-# Это тестовое задание на вакансию junior php laravel разработчика
+# Тестовое задание на вакансию junior php laravel разработчика
 
 [![Maintainability](https://qlty.sh/badges/d2b62576-cd0d-4d3e-8a39-84f720b19ecc/maintainability.svg)](https://qlty.sh/gh/NikolaiProgramist/projects/keep-code-test-assignment)
 
